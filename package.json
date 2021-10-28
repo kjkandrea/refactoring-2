@@ -2,21 +2,14 @@
   "name": "refactoring-2",
   "version": "1.0.0",
   "description": "Refactoring 2nd Edition 코드 필기",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kjkandrea/refactoring-2.git"
   },
-  "keywords": [],
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/kjkandrea/refactoring-2/issues"
-  },
-  "homepage": "https://github.com/kjkandrea/refactoring-2#readme",
   "devDependencies": {
     "nodemon": "^2.0.14"
   }

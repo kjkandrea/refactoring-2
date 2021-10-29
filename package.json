@@ -1,6 +1,7 @@
 {
   "name": "refactoring-2",
   "version": "1.0.0",
+  "main": "jest.config.js",
   "description": "Refactoring 2nd Edition 코드 필기",
   "scripts": {
     "test": "jest"
@@ -12,5 +13,8 @@
   "author": "",
   "devDependencies": {
     "nodemon": "^2.0.14"
+  },
+  "dependencies": {
+    "jest": "^27.3.1"
   }
 }

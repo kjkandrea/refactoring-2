@@ -1,15 +1,17 @@
 import invoicesJSON from './data/invoices.json'
 import playsJSON from './data/plays.json'
-import statement from './statement.before'
+import statementBefore from './statement.before'
+import statement from './statement'
 
 const [invoices] = JSON.parse(JSON.stringify(invoicesJSON));
 const plays = JSON.parse(JSON.stringify(playsJSON));
 
-console.log(statement(invoices, plays))
+describe('statementBefore 와 statement 는', () => {
+  const before = statementBefore(invoices, plays);
+  const after = statement(invoices, plays)
 
+  test('결과가 동일하다.', () =>
+    expect(before).toEqual(after))
 
-describe('', () => {
-  test('크아아아', () => expect([1, 2].reduce((a, b) => a + b)).toBe(3))
-
-  test('import도 할거다!!!', () => expect(invoices).toBeTruthy())
+  console.log(after)
 })

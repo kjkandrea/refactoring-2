@@ -15,7 +15,7 @@ const rateTable = {
   },
 }
 
-function statement (invoice, plays) {
+const statement = (invoice, plays) => {
   const amounts = getAmounts(invoice, plays)
 
   const amountTemplates = amounts.map(({ performanceName, amount, audience }) =>

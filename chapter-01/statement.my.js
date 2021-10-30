@@ -45,6 +45,10 @@ function getPoint(type, audienceCount) {
   return extraPoint + point
 }
 
+function getBillTemplate(format, data) {
+  return `${data.name} : ${format(data.amount / 100)} (${data.audience}석)\n`;
+}
+
 function statement (invoice, plays) {
   let totalAmount = 0
   let volumeCredits = 0
@@ -55,14 +59,16 @@ function statement (invoice, plays) {
   invoice.performances.forEach(perf => {
     const { type, name } = plays[perf.playID]
 
-    const thisAmount = getDefaultAmountOfGenre(rateTable, type, perf.audience)
+    const amount = getDefaultAmountOfGenre(rateTable, type, perf.audience)
     // 포인트를 적립한다.
     volumeCredits += getPoint(type, perf.audience)
 
-    result += `${name} : ${format(thisAmount / 100)} (${
-      perf.audience
-    }석)\n`
-    totalAmount += thisAmount
+    result += getBillTemplate(format, {
+      name,
+      amount,
+      audience: perf.audience
+    })
+    totalAmount += amount
   })
 
   result += `총액: ${format(totalAmount / 100)}\n`

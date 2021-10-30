@@ -49,7 +49,7 @@ function statement (invoice, plays) {
   for (let perf of invoice.performances) {
     const play = plays[perf.playID]
 
-    let thisAmount = getDefaultAmountOfGenre(rateTable, play.type, perf.audience)
+    const thisAmount = getDefaultAmountOfGenre(rateTable, play.type, perf.audience)
 
     // 포인트를 적립한다.
     volumeCredits += Math.max(perf.audience - 30, 0)

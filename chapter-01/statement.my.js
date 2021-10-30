@@ -1,16 +1,16 @@
 const rateTable = {
   tragedy: {
     amount: 40000,
-    extraAmountAudienceCountLimit: 30,
-    extraAmountOfAudienceOverCount: 1000,
-    extraAmountOfAudienceCount: 0,
+    extraAmountAudienceLimit: 30,
+    extraAmountOfAudienceOver: 1000,
+    extraAmountOfAudience: 0,
     extraAmount: 0,
   },
   comedy: {
     amount: 30000,
-    extraAmountAudienceCountLimit: 20,
-    extraAmountOfAudienceOverCount: 500,
-    extraAmountOfAudienceCount: 300,
+    extraAmountAudienceLimit: 20,
+    extraAmountOfAudienceOver: 500,
+    extraAmountOfAudience: 300,
     extraAmount: 10000,
   },
 }
@@ -20,22 +20,22 @@ function getDefaultAmountOfGenre (rateTable, genre, audienceCount) {
   if (amount === undefined) {
     throw new Error(`알 수 없는 장르 : ${genre}`)
   }
-  return amount + getExtraAmountOfAudienceCount(rateTable, genre, audienceCount)
+  return amount + getextraAmountOfAudience(rateTable, genre, audienceCount)
 }
 
-function getExtraAmountOfAudienceCount (rateTable, genre, audienceCount) {
+function getextraAmountOfAudience (rateTable, genre, audienceCount) {
   const {
-    extraAmountAudienceCountLimit,
-    extraAmountOfAudienceOverCount,
-    extraAmountOfAudienceCount,
+    extraAmountAudienceLimit,
+    extraAmountOfAudienceOver,
+    extraAmountOfAudience,
     extraAmount,
   } = rateTable[genre]
-  if (extraAmountAudienceCountLimit >= audienceCount) {
+  if (extraAmountAudienceLimit >= audienceCount) {
     return 0
   }
-  const audienceOverCountAmount = extraAmountOfAudienceOverCount *
-    (audienceCount - extraAmountAudienceCountLimit)
-  const audienceCountAmount = extraAmountOfAudienceCount * audienceCount
+  const audienceOverCountAmount = extraAmountOfAudienceOver *
+    (audienceCount - extraAmountAudienceLimit)
+  const audienceCountAmount = extraAmountOfAudience * audienceCount
   return extraAmount + audienceOverCountAmount + audienceCountAmount
 }
 

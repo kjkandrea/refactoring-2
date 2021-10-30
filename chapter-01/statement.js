@@ -1,8 +1,12 @@
 function statement(invoice, plays) {
   const statementData = {}
   statementData.customer = invoice.customer;
-  statementData.performances = invoice.performances;
+  statementData.performances = enrichPerformance(invoice.performances);
   return renderPlainText(statementData, plays)
+
+  function enrichPerformance(aPerformance) {
+    return [...aPerformance] // 얕은 복사 수행
+  }
 }
 
 function renderPlainText(data, plays) {

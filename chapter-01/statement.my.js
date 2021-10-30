@@ -46,8 +46,7 @@ function getPoint (type, audienceCount) {
 }
 
 function statement (invoice, plays) {
-  const amounts = invoice.performances.map(perf => {
-    const { playID, audience } = perf
+  const amounts = invoice.performances.map(({ playID, audience }) => {
     const { type, name } = plays[playID]
 
     return {

@@ -50,10 +50,10 @@ function getDefaultAmountOfGenre (rateTable, genre, audienceCount) {
   if (amount === undefined) {
     throw new Error(`알 수 없는 장르 : ${genre}`)
   }
-  return amount + getextraAmountOfAudience(rateTable, genre, audienceCount)
+  return amount + getExtraAmountOfAudience(rateTable, genre, audienceCount)
 }
 
-function getextraAmountOfAudience (rateTable, genre, audienceCount) {
+function getExtraAmountOfAudience (rateTable, genre, audienceCount) {
   const {
     extraAmountAudienceLimit,
     extraAmountOfAudienceOver,

@@ -3,11 +3,7 @@ function statement(invoice, plays) {
   let volumeCredits = 0;
   let result = `청구내역 (고객명: ${invoice.customer})\n`;
 
-  const format = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-  }).format;
+  const format = getUSDFormat()
 
   for (let perf of invoice.performances) {
     const play = plays[perf.playID];
@@ -54,6 +50,14 @@ function statement(invoice, plays) {
   result += `적립 포인트: ${volumeCredits}점\n`;
 
   return result;
+}
+
+function getUSDFormat() {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  }).format;
 }
 
 export default statement;

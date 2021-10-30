@@ -15,6 +15,32 @@ const rateTable = {
   },
 }
 
+function statement (invoice, plays) {
+  const amounts = invoice.performances.map(({ playID, audience }) => {
+    const { type: genre, name: performanceName } = plays[playID]
+
+    return {
+      performanceName,
+      genre,
+      audience,
+      amount: getDefaultAmountOfGenre(rateTable, genre, audience),
+      point: getPoint(genre, audience),
+    }
+  })
+
+  const amountTemplates = amounts.map(({ performanceName, amount, audience }) =>
+    `${performanceName} : ${USDFormat(amount / 100)} (${audience}석)`)
+  const totalAmount = amounts.map(({ amount }) => amount).reduce((a, b) => a + b)
+  const totalPoint = amounts.map(({ point }) => point).reduce((a, b) => a + b)
+
+  return [
+    `청구내역 (고객명: ${invoice.customer})`,
+    ...amountTemplates,
+    `총액: ${USDFormat(totalAmount/100)}`,
+    `적립 포인트: ${totalPoint}점\n`,
+  ].join('\n')
+}
+
 function getDefaultAmountOfGenre (rateTable, genre, audienceCount) {
   const { amount } = rateTable[genre]
   if (amount === undefined) {
@@ -43,32 +69,6 @@ function getPoint (type, audienceCount) {
   const extraPoint = type === 'comedy' ? Math.max(audienceCount / 5, 0) : 0 // TODO
   const point = Math.max(audienceCount - 30, 0)
   return extraPoint + point
-}
-
-function statement (invoice, plays) {
-  const amounts = invoice.performances.map(({ playID, audience }) => {
-    const { type, name } = plays[playID]
-
-    return {
-      performanceName: name,
-      genre: type,
-      audience,
-      amount: getDefaultAmountOfGenre(rateTable, type, audience),
-      point: getPoint(type, audience),
-    }
-  })
-
-  const amountTemplates = amounts.map(({ performanceName, amount, audience }) =>
-    `${performanceName} : ${USDFormat(amount / 100)} (${audience}석)`)
-  const totalAmount = amounts.map(({ amount }) => amount).reduce((a, b) => a + b)
-  const totalPoint = amounts.map(({ point }) => point).reduce((a, b) => a + b)
-
-  return [
-    `청구내역 (고객명: ${invoice.customer})`,
-    ...amountTemplates,
-    `총액: ${USDFormat(totalAmount/100)}`,
-    `적립 포인트: ${totalPoint}점\n`,
-  ].join('\n')
 }
 
 function USDFormat (number) {

@@ -39,43 +39,53 @@ function getextraAmountOfAudience (rateTable, genre, audienceCount) {
   return extraAmount + audienceOverCountAmount + audienceCountAmount
 }
 
-function getPoint(type, audienceCount) {
+function getPoint (type, audienceCount) {
   const extraPoint = type === 'comedy' ? Math.max(audienceCount / 5, 0) : 0 // TODO
-  const point = Math.max(audienceCount - 30, 0);
+  const point = Math.max(audienceCount - 30, 0)
   return extraPoint + point
 }
 
-function getAmountTemplate(format, data) {
-  return `${data.name} : ${format(data.amount / 100)} (${data.audience}석)\n`;
+function getAmountTemplate (format, data) {
+  return `${data.performanceName} : ${format(data.amount / 100)} (${data.audience}석)`
 }
 
 function statement (invoice, plays) {
   let totalAmount = 0
   let volumeCredits = 0
-  let result = `청구내역 (고객명: ${invoice.customer})\n`
 
   const format = getUSDFormat()
 
-  invoice.performances.forEach(perf => {
+  const amounts = invoice.performances.map(perf => {
     const { playID, audience } = perf
     const { type, name } = plays[playID]
 
     const amount = getDefaultAmountOfGenre(rateTable, type, audience)
-    // 포인트를 적립한다.
-    volumeCredits += getPoint(type, audience)
-
-    result += getAmountTemplate(format, {
-      name,
-      amount,
-      audience
-    })
     totalAmount += amount
+    // 포인트를 적립한다.
+    const point = getPoint(type, audience)
+    volumeCredits += point
+
+    return {
+      performanceName: name,
+      genre: type,
+      audience,
+      amount,
+      point,
+    }
   })
 
-  result += `총액: ${format(totalAmount / 100)}\n`
-  result += `적립 포인트: ${volumeCredits}점\n`
-
-  return result
+  return [
+    `청구내역 (고객명: ${invoice.customer})`,
+    ...amounts.map(({ performanceName, amount, audience }) => {
+      return getAmountTemplate(format, {
+        performanceName,
+        amount,
+        audience,
+      })
+    }),
+    `총액: ${format(totalAmount / 100)}`,
+    `적립 포인트: ${volumeCredits}점\n`,
+  ].join('\n')
 }
 
 function getUSDFormat () {

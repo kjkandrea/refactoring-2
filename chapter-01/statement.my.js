@@ -57,16 +57,17 @@ function statement (invoice, plays) {
   const format = getUSDFormat()
 
   invoice.performances.forEach(perf => {
-    const { type, name } = plays[perf.playID]
+    const { playID, audience } = perf
+    const { type, name } = plays[playID]
 
-    const amount = getDefaultAmountOfGenre(rateTable, type, perf.audience)
+    const amount = getDefaultAmountOfGenre(rateTable, type, audience)
     // 포인트를 적립한다.
-    volumeCredits += getPoint(type, perf.audience)
+    volumeCredits += getPoint(type, audience)
 
     result += getAmountTemplate(format, {
       name,
       amount,
-      audience: perf.audience
+      audience
     })
     totalAmount += amount
   })

@@ -60,9 +60,7 @@ function getextraAmountOfAudience (rateTable, genre, audienceCount) {
     extraAmountOfAudience,
     extraAmount,
   } = rateTable[genre]
-  if (extraAmountAudienceLimit >= audienceCount) {
-    return 0
-  }
+  if (extraAmountAudienceLimit >= audienceCount) return 0
   const audienceOverCountAmount = extraAmountOfAudienceOver *
     (audienceCount - extraAmountAudienceLimit)
   const audienceCountAmount = extraAmountOfAudience * audienceCount

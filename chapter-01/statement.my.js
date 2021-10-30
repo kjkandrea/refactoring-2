@@ -45,7 +45,7 @@ function getPoint(type, audienceCount) {
   return extraPoint + point
 }
 
-function getBillTemplate(format, data) {
+function getAmountTemplate(format, data) {
   return `${data.name} : ${format(data.amount / 100)} (${data.audience}석)\n`;
 }
 
@@ -63,7 +63,7 @@ function statement (invoice, plays) {
     // 포인트를 적립한다.
     volumeCredits += getPoint(type, perf.audience)
 
-    result += getBillTemplate(format, {
+    result += getAmountTemplate(format, {
       name,
       amount,
       audience: perf.audience

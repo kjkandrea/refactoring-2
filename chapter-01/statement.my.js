@@ -18,16 +18,11 @@ const statement = (invoice, plays) => {
 
   const amounts = getAmounts(invoice, plays)
 
-  const amountTemplates = amounts.map(({ performanceName, amount, audience }) =>
-    `${performanceName} : ${usd(amount / 100)} (${audience}석)`)
-  const totalAmount = amounts.map(({ amount }) => amount).reduce((a, b) => a + b)
-  const totalPoint = amounts.map(({ point }) => point).reduce((a, b) => a + b)
-
   return [
     `청구내역 (고객명: ${invoice.customer})`,
-    ...amountTemplates,
-    `총액: ${usd(totalAmount/100)}`,
-    `적립 포인트: ${totalPoint}점\n`,
+    ...amountTemplates(amounts),
+    `총액: ${usd(totalAmount(amounts)/100)}`,
+    `적립 포인트: ${totalPoint(amounts)}점\n`,
   ].join('\n')
 
   function getAmounts(invoice, plays) {
@@ -78,6 +73,17 @@ const statement = (invoice, plays) => {
       currency: 'USD',
       minimumFractionDigits: 2,
     }).format(number)
+  }
+
+  function amountTemplates (amounts) {
+    return amounts.map(({ performanceName, amount, audience }) =>
+      `${performanceName} : ${usd(amount / 100)} (${audience}석)`)
+  }
+  function totalAmount (amounts) {
+    return amounts.map(({ amount }) => amount).reduce((a, b) => a + b);
+  }
+  function totalPoint (amounts) {
+    return amounts.map(({ point }) => point).reduce((a, b) => a + b)
   }
 }
 

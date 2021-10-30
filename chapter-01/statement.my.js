@@ -47,19 +47,19 @@ function statement (invoice, plays) {
   const format = getUSDFormat()
 
   for (let perf of invoice.performances) {
-    const play = plays[perf.playID]
+    const { type, name } = plays[perf.playID]
 
-    const thisAmount = getDefaultAmountOfGenre(rateTable, play.type, perf.audience)
+    const thisAmount = getDefaultAmountOfGenre(rateTable, type, perf.audience)
 
     // 포인트를 적립한다.
     volumeCredits += Math.max(perf.audience - 30, 0)
 
     // 희극 관객 5명마다 추가 포인트를 제공한다.
-    if ('comedy' === play.type) {
+    if ('comedy' === type) {
       volumeCredits += Math.floor(perf.audience / 5)
     }
 
-    result += `${play.name} : ${format(thisAmount / 100)} (${
+    result += `${name} : ${format(thisAmount / 100)} (${
       perf.audience
     }석)\n`
     totalAmount += thisAmount

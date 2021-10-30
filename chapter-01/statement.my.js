@@ -16,17 +16,7 @@ const rateTable = {
 }
 
 function statement (invoice, plays) {
-  const amounts = invoice.performances.map(({ playID, audience }) => {
-    const { type: genre, name: performanceName } = plays[playID]
-
-    return {
-      performanceName,
-      genre,
-      audience,
-      amount: getDefaultAmountOfGenre(rateTable, genre, audience),
-      point: getPoint(genre, audience),
-    }
-  })
+  const amounts = getAmounts(invoice, plays)
 
   const amountTemplates = amounts.map(({ performanceName, amount, audience }) =>
     `${performanceName} : ${USDFormat(amount / 100)} (${audience}석)`)
@@ -39,6 +29,20 @@ function statement (invoice, plays) {
     `총액: ${USDFormat(totalAmount/100)}`,
     `적립 포인트: ${totalPoint}점\n`,
   ].join('\n')
+}
+
+function getAmounts(invoice, plays) {
+  return invoice.performances.map(({ playID, audience }) => {
+    const { type: genre, name: performanceName } = plays[playID]
+
+    return {
+      performanceName,
+      genre,
+      audience,
+      amount: getDefaultAmountOfGenre(rateTable, genre, audience),
+      point: getPoint(genre, audience),
+    }
+  })
 }
 
 function getDefaultAmountOfGenre (rateTable, genre, audienceCount) {

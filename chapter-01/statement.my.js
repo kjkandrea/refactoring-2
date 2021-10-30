@@ -76,13 +76,13 @@ function statement (invoice, plays) {
 
   return [
     `청구내역 (고객명: ${invoice.customer})`,
-    ...amounts.map(({ performanceName, amount, audience }) => {
-      return getAmountTemplate(format, {
+    ...amounts.map(({ performanceName, amount, audience }) =>
+      getAmountTemplate(format, {
         performanceName,
         amount,
         audience,
       })
-    }),
+    ),
     `총액: ${format(totalAmount / 100)}`,
     `적립 포인트: ${volumeCredits}점\n`,
   ].join('\n')

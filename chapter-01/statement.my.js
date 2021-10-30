@@ -40,9 +40,9 @@ function getextraAmountOfAudience (rateTable, genre, audienceCount) {
 }
 
 function getPoint(type, audienceCount) {
+  const extraPoint = type === 'comedy' ? Math.max(audienceCount / 5, 0) : 0 // TODO
   const point = Math.max(audienceCount - 30, 0);
-  const extraPoint = type === 'comedy' ? Math.max(audienceCount / 5, 0) : 0
-  return point + extraPoint
+  return extraPoint + point
 }
 
 function statement (invoice, plays) {
@@ -52,11 +52,10 @@ function statement (invoice, plays) {
 
   const format = getUSDFormat()
 
-  for (let perf of invoice.performances) {
+  invoice.performances.forEach(perf => {
     const { type, name } = plays[perf.playID]
 
     const thisAmount = getDefaultAmountOfGenre(rateTable, type, perf.audience)
-
     // 포인트를 적립한다.
     volumeCredits += getPoint(type, perf.audience)
 
@@ -64,7 +63,7 @@ function statement (invoice, plays) {
       perf.audience
     }석)\n`
     totalAmount += thisAmount
-  }
+  })
 
   result += `총액: ${format(totalAmount / 100)}\n`
   result += `적립 포인트: ${volumeCredits}점\n`

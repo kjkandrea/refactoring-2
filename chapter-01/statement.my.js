@@ -45,10 +45,6 @@ function getPoint (type, audienceCount) {
   return extraPoint + point
 }
 
-function getAmountTemplate (format, data) {
-  return `${data.performanceName} : ${format(data.amount / 100)} (${data.audience}석)`
-}
-
 function statement (invoice, plays) {
   const format = getUSDFormat()
 
@@ -66,11 +62,7 @@ function statement (invoice, plays) {
   })
 
   const amountTemplates = amounts.map(({ performanceName, amount, audience }) =>
-    getAmountTemplate(format, {
-      performanceName,
-      amount,
-      audience,
-    }))
+    `${performanceName} : ${format(amount / 100)} (${audience}석)`)
   const totalAmount = amounts.map(({ amount }) => amount).reduce((a, b) => a + b)
   const totalPoint = amounts.map(({ point }) => point).reduce((a, b) => a + b)
 

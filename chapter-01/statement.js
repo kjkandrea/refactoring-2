@@ -1,11 +1,18 @@
 function statement(invoice, plays) {
   const statementData = {}
   statementData.customer = invoice.customer;
-  statementData.performances = enrichPerformance(invoice.performances);
+  statementData.performances = invoice.performances.map(enrichPerformance);
   return renderPlainText(statementData, plays)
 
   function enrichPerformance(aPerformance) {
-    return [...aPerformance] // 얕은 복사 수행
+    return {
+      ...aPerformance,
+      play: playFor(aPerformance)
+    };
+  }
+
+  function playFor(aPerformance) {
+    return plays[aPerformance.playID]
   }
 }
 

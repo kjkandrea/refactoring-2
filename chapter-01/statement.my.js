@@ -46,8 +46,6 @@ function getPoint (type, audienceCount) {
 }
 
 function statement (invoice, plays) {
-  const format = getUSDFormat()
-
   const amounts = invoice.performances.map(perf => {
     const { playID, audience } = perf
     const { type, name } = plays[playID]
@@ -62,24 +60,24 @@ function statement (invoice, plays) {
   })
 
   const amountTemplates = amounts.map(({ performanceName, amount, audience }) =>
-    `${performanceName} : ${format(amount / 100)} (${audience}석)`)
+    `${performanceName} : ${USDFormat(amount / 100)} (${audience}석)`)
   const totalAmount = amounts.map(({ amount }) => amount).reduce((a, b) => a + b)
   const totalPoint = amounts.map(({ point }) => point).reduce((a, b) => a + b)
 
   return [
     `청구내역 (고객명: ${invoice.customer})`,
     ...amountTemplates,
-    `총액: ${format(totalAmount/100)}`,
+    `총액: ${USDFormat(totalAmount/100)}`,
     `적립 포인트: ${totalPoint}점\n`,
   ].join('\n')
 }
 
-function getUSDFormat () {
+function USDFormat (number) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 2,
-  }).format
+  }).format(number)
 }
 
 export default statement

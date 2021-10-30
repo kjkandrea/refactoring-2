@@ -7,4 +7,6 @@ Refactoring 2nd Edition 코드 필기
 
 # IDE
 
-rename variable, function : `⇧ F6`
+## jetbrain products
+
+* rename variable, function : `⇧ F6`

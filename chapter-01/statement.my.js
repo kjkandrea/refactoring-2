@@ -39,8 +39,10 @@ function getextraAmountOfAudience (rateTable, genre, audienceCount) {
   return extraAmount + audienceOverCountAmount + audienceCountAmount
 }
 
-function getPoint(audienceCount) {
-  return Math.max(audienceCount - 30, 0);
+function getPoint(type, audienceCount) {
+  const point = Math.max(audienceCount - 30, 0);
+  const extraPoint = type === 'comedy' ? Math.max(audienceCount / 5, 0) : 0
+  return point + extraPoint
 }
 
 function statement (invoice, plays) {
@@ -56,12 +58,7 @@ function statement (invoice, plays) {
     const thisAmount = getDefaultAmountOfGenre(rateTable, type, perf.audience)
 
     // 포인트를 적립한다.
-    volumeCredits += getPoint(perf.audience)
-
-    // 희극 관객 5명마다 추가 포인트를 제공한다.
-    if ('comedy' === type) {
-      volumeCredits += Math.floor(perf.audience / 5)
-    }
+    volumeCredits += getPoint(type, perf.audience)
 
     result += `${name} : ${format(thisAmount / 100)} (${
       perf.audience

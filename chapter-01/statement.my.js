@@ -50,41 +50,35 @@ function getAmountTemplate (format, data) {
 }
 
 function statement (invoice, plays) {
-  let totalAmount = 0
-  let volumeCredits = 0
-
   const format = getUSDFormat()
 
   const amounts = invoice.performances.map(perf => {
     const { playID, audience } = perf
     const { type, name } = plays[playID]
 
-    const amount = getDefaultAmountOfGenre(rateTable, type, audience)
-    totalAmount += amount
-    // 포인트를 적립한다.
-    const point = getPoint(type, audience)
-    volumeCredits += point
-
     return {
       performanceName: name,
       genre: type,
       audience,
-      amount,
-      point,
+      amount: getDefaultAmountOfGenre(rateTable, type, audience),
+      point: getPoint(type, audience),
     }
   })
 
+  const amountTemplates = amounts.map(({ performanceName, amount, audience }) =>
+    getAmountTemplate(format, {
+      performanceName,
+      amount,
+      audience,
+    }))
+  const totalAmount = amounts.map(({ amount }) => amount).reduce((a, b) => a + b)
+  const totalPoint = amounts.map(({ point }) => point).reduce((a, b) => a + b)
+
   return [
     `청구내역 (고객명: ${invoice.customer})`,
-    ...amounts.map(({ performanceName, amount, audience }) =>
-      getAmountTemplate(format, {
-        performanceName,
-        amount,
-        audience,
-      })
-    ),
-    `총액: ${format(totalAmount / 100)}`,
-    `적립 포인트: ${volumeCredits}점\n`,
+    ...amountTemplates,
+    `총액: ${format(totalAmount/100)}`,
+    `적립 포인트: ${totalPoint}점\n`,
   ].join('\n')
 }
 

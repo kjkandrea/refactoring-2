@@ -67,8 +67,8 @@ function getExtraAmountOfAudience (rateTable, genre, audienceCount) {
   return extraAmount + audienceOverCountAmount + audienceCountAmount
 }
 
-function getPoint (type, audienceCount) {
-  const extraPoint = type === 'comedy' ? Math.max(audienceCount / 5, 0) : 0 // TODO
+function getPoint (genre, audienceCount) {
+  const extraPoint = genre === 'comedy' ? Math.max(audienceCount / 5, 0) : 0 // TODO
   const point = Math.max(audienceCount - 30, 0)
   return extraPoint + point
 }
